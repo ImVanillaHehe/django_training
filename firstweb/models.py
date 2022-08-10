@@ -1,10 +1,22 @@
 from django.db import models
 
 
+class StatusWeb(models.Model):
+    Status_name = models.CharField(max_length=200, verbose_name='Название статуса')
+
+    def __str__(self):
+        return self.Status_name
+
+    class Meta:
+        verbose_name = 'Статус'
+        verbose_name_plural = 'Статусы'
+
+
 class Order(models.Model):
     order_dt = models.DateTimeField(auto_now=True)
     order_name = models.CharField(max_length=200, verbose_name='Имя')
     order_phone = models.CharField(max_length=200, verbose_name='Телефон')
+    order_status = models.ForeignKey(StatusWeb, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Статус')
 
     def __str__(self):
         return self.order_name
@@ -13,4 +25,17 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
-# Create your models here.
+
+class CommentWeb(models.Model):
+    comment_binding = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заявка')
+    comment_text = models.TextField(verbose_name='Текст коментария')
+    comment_dt = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
+
+    def __str__(self):
+        return self.comment_text
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+
